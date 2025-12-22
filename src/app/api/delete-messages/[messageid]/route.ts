@@ -8,9 +8,10 @@ import { User } from "next-auth";
 
 export async function DELETE(
     request:Request,
-    {params}: {params: {messageid: string}}){
-        
-        const messageId = params.messageid;
+    {params}: {params: Promise<{messageid: string}>}
+){
+        const { messageid } = await params;
+        const messageId = messageid;
         
         await dbConnect();
 
