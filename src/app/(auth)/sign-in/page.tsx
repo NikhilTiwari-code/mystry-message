@@ -18,7 +18,6 @@ import {
   import Link from 'next/link';
   import { useRouter } from 'next/navigation';
   import { toast } from 'sonner';
-  import axios from 'axios';
   import { signInSchema } from '@/schemas/signInSchema';
 
 

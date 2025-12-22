@@ -5,9 +5,7 @@ import {toast} from "sonner"
 import dayjs from "dayjs"
 import { X } from "lucide-react"
 import {Message} from "@/models/user.model"
-import {useSession} from "next-auth/react"
 import {Button} from "@/components/ui/button"
-import { ApiResponse } from "@/types/ApiResponse"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -44,6 +42,7 @@ function MessageCard({message,onMessageDelete}:MessageCardProps){
             onMessageDelete(message._id as string)
            
         } catch (error) {
+            console.error("Error deleting message:", error);
             toast.error("Failed to delete message")
         }
     }

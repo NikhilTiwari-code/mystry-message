@@ -1,7 +1,6 @@
 "use client"
 
 import {Button} from "@/components/ui/button"
-import {signOut} from "next-auth/react"
 import {toast} from "sonner"
 import {useSession} from "next-auth/react"
 import { Switch } from "@/components/ui/switch"
@@ -38,7 +37,7 @@ function DashboardPage (){
         setMessages((prev)=>prev.filter((message)=>message.id !== messageId))
     }
     
-    const {register,handleSubmit,watch,setValue} = form;
+    const {register,watch,setValue} = form;
     const acceptMessages = watch("acceptMessages");
 
     const fetchAcceptMessages =useCallback(async()=>{
@@ -54,7 +53,7 @@ function DashboardPage (){
         setIsLoading(false)
       }
 
-    },[setValue,toast])
+    },[setValue])
 
     const fetchMessages = useCallback(
         async (refresh: boolean = false) => {
@@ -77,14 +76,14 @@ function DashboardPage (){
             setIsSwitchLoading(false);
           }
         },
-        [setIsLoading, setMessages, toast]
+        [setIsLoading, setMessages]
       );
 
       useEffect(() => {
         if(!session|| !session.user) return 
         fetchAcceptMessages();
         fetchMessages();
-      }, [session, setValue, toast, fetchAcceptMessages, fetchMessages]);
+      }, [session, setValue, fetchAcceptMessages, fetchMessages]);
 
       // handle switch change 
       const handleSwitchChange = async (checked:boolean)=>{
@@ -92,9 +91,9 @@ function DashboardPage (){
         try {
 
             const response = await axios.post("/api/accept-messages",{
-                acceptMessages:!acceptMessages
+                acceptMessages:checked
             })
-            setValue("acceptMessages",!acceptMessages)
+            setValue("acceptMessages",checked)
             if(response.status === 200){
                 toast.success("User updated successfully")
             }
@@ -166,7 +165,7 @@ function DashboardPage (){
       </Button>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {message.length > 0 ? (
-          message.map((message, index) => (
+          message.map((message) => (
             <MessageCard
               key={message.id}
               message={message}

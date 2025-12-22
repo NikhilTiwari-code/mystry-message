@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { CardHeader, CardContent, Card } from '@/components/ui/card';
+import { CardHeader, Card } from '@/components/ui/card';
 
 import {
   Form,
@@ -25,38 +25,15 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { messageSchema } from '@/schemas/messageSchema';
 
-const specialChar = '||';
-
-const parseStringMessages = (messageString: string): string[] => {
-  return messageString.split(specialChar);
-};
-
-const initialMessageString =
-  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
-
 export default function SendMessage() {
   const params = useParams<{ username: string }>();
   const username = params.username;
-
-//   const {
-//     complete,
-//     completion,
-//     isLoading: isSuggestLoading,
-//     error,
-//   } = useCompletion({
-//     api: '/api/suggest-messages',
-//     initialCompletion: initialMessageString,
-//   });
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
   });
 
   const messageContent = form.watch('content');
-
-  const handleMessageClick = (message: string) => {
-    form.setValue('content', message);
-  };
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -82,12 +59,13 @@ export default function SendMessage() {
 
   const fetchSuggestedMessages = async () => {
     try {
-      // complete('');
+      const response = await axios.get<ApiResponse>('/api/suggest-messages');
+      console.log(response.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
       // Handle error appropriately
     }
-  };
+  }; 
 
   return (
     <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
@@ -127,7 +105,7 @@ export default function SendMessage() {
           </div>
         </form>
       </Form>
-
+ 
       <div className="space-y-4 my-8">
         <div className="space-y-2">
           <Button

@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db"
-import NextAuth, { AuthOptions } from "next-auth"
+import { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import UserModel from "@/models/user.model"
 import bcrypt from "bcrypt"
@@ -18,6 +18,7 @@ import { SessionStrategy } from "next-auth"
         password: { label: "Password", type: "password" }
       },
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       async authorize(credentials: Record<string, string> | undefined): Promise<any | null> {
         
         await dbConnect();  

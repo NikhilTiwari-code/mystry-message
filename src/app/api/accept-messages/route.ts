@@ -63,7 +63,7 @@ export async function POST(request:Request){
     }
 }
 
-export async function GET(request:Request){
+export async function GET(){
     await dbConnect();
     
    const session = await getServerSession(authOptions);
@@ -101,7 +101,14 @@ export async function GET(request:Request){
     })
     
    } catch (error) {
-    
+    console.error("Error fetching user:", error);
+    return Response.json({
+        success:false,
+        message:"Error fetching user"
+    },
+    {
+        status:500
+    })
    }
 }
 
