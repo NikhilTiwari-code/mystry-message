@@ -16,13 +16,22 @@ async function dbConnect(){
      console.log("Already connected to db");
       return;
     }
+    
+    if (!process.env.MONGODB_URI) {
+        console.error("MONGODB_URI is not defined in environment variables");
+        throw new Error("MONGODB_URI is not defined");
+    }
+
     try {
-        const db =await mongoose.connect(process.env.MONGODB_URI!);
+        console.log("Connecting to MongoDB...");
+        const db = await mongoose.connect(process.env.MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of hanging
+        });
         console.log("Connected to db");
-        connection.isConnected = db.connection.readyState;
+        connection.isConnected = db.connections[0].readyState;
     } catch (error) {
-        console.log("Error connecting to db",error);
-        process.exit(1);
+        console.error("Error connecting to db", error);
+        throw error;
     }
 }
 

@@ -5,7 +5,7 @@ import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { User } from "next-auth";
 import mongoose from "mongoose";
 
-
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request){
     await dbConnect();

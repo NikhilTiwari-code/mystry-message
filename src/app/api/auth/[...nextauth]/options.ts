@@ -20,9 +20,8 @@ import { SessionStrategy } from "next-auth"
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       async authorize(credentials: Record<string, string> | undefined): Promise<any | null> {
-        
-        await dbConnect();  
         try {
+          await dbConnect();  
           // Check if credentials are provided
           if (!credentials) {
             throw new Error("Credentials not provided");
