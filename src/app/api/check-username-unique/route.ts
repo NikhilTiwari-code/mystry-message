@@ -10,9 +10,9 @@ const UsernameQuerySchema = z.object({
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  await dbConnect();
-
   try {
+    await dbConnect();
+
     const { searchParams } = new URL(request.url);
     const queryParams = {
       username: searchParams.get('username'),
