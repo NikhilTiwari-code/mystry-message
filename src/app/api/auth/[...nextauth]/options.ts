@@ -2,7 +2,7 @@ import dbConnect from "@/lib/db"
 import { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import UserModel from "@/models/user.model"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { SessionStrategy } from "next-auth"
 
 

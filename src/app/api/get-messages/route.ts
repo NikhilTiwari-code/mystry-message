@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 
 
-export async function GET(){
+export async function GET(request: Request){
     await dbConnect();
     
     
