@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { CardHeader, Card } from '@/components/ui/card';
+import { CardHeader, Card, CardContent } from '@/components/ui/card';
 
 import {
   Form,
@@ -36,6 +36,8 @@ export default function SendMessage() {
   const messageContent = form.watch('content');
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuggestLoading, setIsSuggestLoading] = useState(false);
+  const [suggestedMessages, setSuggestedMessages] = useState<string[]>([]);
 
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
     setIsLoading(true);
@@ -58,12 +60,16 @@ export default function SendMessage() {
   };
 
   const fetchSuggestedMessages = async () => {
+    setIsSuggestLoading(true);
     try {
       const response = await axios.get<ApiResponse>('/api/suggest-messages');
-      console.log(response.data);
+      const messagesString = response.data.message;
+      setSuggestedMessages(messagesString.split('||'));
     } catch (error) {
       console.error('Error fetching messages:', error);
-      // Handle error appropriately
+      toast.error('Failed to fetch suggested messages');
+    } finally {
+      setIsSuggestLoading(false);
     }
   }; 
 
@@ -109,11 +115,18 @@ export default function SendMessage() {
       <div className="space-y-4 my-8">
         <div className="space-y-2">
           <Button
-            onClick={()=>fetchSuggestedMessages()}
+            onClick={() => fetchSuggestedMessages()}
             className="my-4"
-            // disabled={isSuggestLoading}
+            disabled={isSuggestLoading}
           >
-            Suggest Messages
+            {isSuggestLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Wait...
+              </>
+            ) : (
+              'Suggest Messages'
+            )}
           </Button>
           <p>Click on any message below to select it.</p>
         </div>
@@ -121,7 +134,18 @@ export default function SendMessage() {
           <CardHeader>
             <h3 className="text-xl font-semibold">Messages</h3>
           </CardHeader>
-          
+          <CardContent className="flex flex-col space-y-4">
+            {suggestedMessages.map((message, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                className="mb-2 text-wrap text-start w-full whitespace-normal h-auto py-2"
+                onClick={() => form.setValue('content', message)}
+              >
+                {message}
+              </Button>
+            ))}
+          </CardContent>
         </Card>
       </div>
       <Separator className="my-6" />

@@ -7,7 +7,12 @@ export async function GET() {
       "Do you have any pets?",
       "What's your dream job?",
       "What's a hidden talent you have?",
-      "What's the best advice you've ever received?"
+      "What's the best advice you've ever received?",
+      "If you could travel anywhere right now, where would it be?",
+      "What is your favorite book of all time?",
+      "What is a hobby you've always wanted to try?",
+      "Who has been the biggest influence in your life?",
+      "What is your favorite childhood memory?"
     ];
     
     // Return the questions as a single string separated by '||' to match the expected format
